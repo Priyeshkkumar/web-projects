@@ -71,29 +71,35 @@ a {
 
 <form action='signup.php' method='post' enctype='multipart/form-data'>
   <div class="container">
-    <h1>Sign Up</h1>
+    <h1>Fee Payment</h1>
     <hr>
 
 
     <label for="Fullname"><b>Name</b></label>
-    <input type="text" placeholder="Enter Fullname" name='fullname' required>
+    <input type="text" placeholder="Enter Fullname" name="name" required>
 
-    <label for="email"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name='username' required>
+    <label for="referenceno"><b>Bank Reference Number</b></label>
+    <input type="text" placeholder="Reference Number" name="referenceno" required>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name='password' required>
+	<label for="ifsc"><b>Bank IFSC Code</b></label>
+	<input type="text" placeholder="IFSC Code" name="ifsc" required>
+	
+	<label for="amount"><b>Fee Amount</b></label>
+    <input type="text"placeholder="Enter Amount" name="amount" required>	
 
-    <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name='rpassword' required>
+    <label for="psw"><b>Roll Number</b></label>
+    <input type="text" placeholder="Enter Roll Number" name="rollno" required>
+
+    <label for="semester"><b>Semester</b></label>
+    <input type="text" placeholder="Enter Semester" name="semester" required>
     
     <label for="dob"><b>Date of Birth</b></label>
-    <input type="date" name='date'  required>
+	<input type="date" name="date"  required>
     
     <hr>
 
 
-    <button type="submit" class="registerbtn" onclick ="returnvalidation();">Register</button>
+    <button type="submit" class="registerbtn">Register</button>
   </div>
   
   <div class="container signin">
@@ -101,40 +107,28 @@ a {
   </div>
 </form>
 
-<?php
-$fullname=filter_input(INPUT_POST,'fullname');
-$username=filter_input(INPUT_POST,'username');
-$password=md5(filter_input(INPUT_POST,'password'));
-$rpassword=md5(filter_input(INPUT_POST,'rpassword'));
-$date= date("yy-mm-dd");
-
-include 'connfile.php';
-$namecheck=$conn->query("SELECT username FROM login WHERE username='$username'");
-if($namecheck->num_rows!=0)
-{die("username already exists !");}
-if($fullname&&$username&&$password&&$rpassword&&$date)
-{
-  if($password==$rpassword)
-   { 
-    if (strlen($password)>6)
-    {
-     $conn->query("INSERT INTO login VALUES ('$fullname','$username','$password','$date')");
-     echo " You have been succesfully registered !";
-    }
-    else
-    { 
-     echo"password length must be greater than 6";
-
-    }
-   }
-  else
-   {
-    echo "your passwords don't match !";
-   }
-}
-?>
-
 </body>
 </html>
 
+<?php
+$name=filter_input(INPUT_POST,'name');
+$ifsc=filter_input(INPUT_POST,'ifsc');
+$referenceno=filter_input(INPUT_POST,'referenceno');
+$dob=filter_input(INPUT_POST,'dob');
+$rollno=filter_input(INPUT_POST,'rollno');
+$semester=filter_input(INPUT_POST,'semester');
+$amount=filter_input(INPUT_POST,'amount');
 
+
+include 'connfile.php' ;
+$sql = "INSERT INTO fees (referenceno,ifsc,name,rollno,semester,dob,amount)
+VALUES ('$referenceno','$ifsc','$name','$rollno','$semester','$dob','$amount')";
+if ($conn->query($sql) === TRUE) {
+    echo  "<script>alert('values submitted')
+window.location.href='form.php?rollno=$rollno&semester=$semester'
+</script>";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+ 
+?>

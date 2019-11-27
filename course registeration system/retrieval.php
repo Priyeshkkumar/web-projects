@@ -12,8 +12,8 @@ if($result->num_rows!=0)
 { 
    if(($username==$duser)&&(md5($password)==$dpass))
      { 
-        echo "<script>alert('Successfully LoggedIn')
-window.location.href='register.php'</script>" ;
+        echo"<script>
+window.location.href='register.php?username=$username'</script>";
      }
    else
      { 
